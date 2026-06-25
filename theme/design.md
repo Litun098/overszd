@@ -100,3 +100,16 @@ Plain, blunt, confident. Active verbs. No fashion-blog fluff.
 - Grid 4 → 2 col
 - Detail / drop stack to single column
 - Visible keyboard focus, reduced-motion honored, alt text on all imagery
+
+---
+
+## 8. App Architecture & Client State
+
+- **Global Context (`CartContext`)**: Synchronizes shopping bag count, items selection, and slide drawer toggles.
+- **Persistent Wrappers (`ClientLayoutWrapper`)**: Persists Nav, Sidebar Drawers, and Toast stacks globally.
+- **Dynamic Routes**:
+  - `/product/[id]`: Detailed product specification, custom dimensions, shipping accordions, and related grids.
+  - `/shop`: Search and sorting-focused product list directories.
+  - `/checkout` & `/order-success`: Validation-focused shipping forms, invoice promo discount codes (`OVRSZD26` for 15% off), and receipt confirmations.
+  - `/about`, `/size-guide`, `/faq`: static content tables and accordions.
+
