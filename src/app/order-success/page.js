@@ -19,8 +19,12 @@ export default function OrderSuccess() {
       setOrder(JSON.parse(savedOrder));
     }
 
-    // Animation entry
-    gsap.from('.success-card', { opacity: 0, scale: 0.9, y: 20, duration: 0.8, ease: 'power3.out' });
+    // Animation entry inside context
+    const ctx = gsap.context(() => {
+      gsap.from('.success-card', { opacity: 0, scale: 0.9, y: 20, duration: 0.8, ease: 'power3.out' });
+    });
+
+    return () => ctx.revert();
   }, []);
 
   return (

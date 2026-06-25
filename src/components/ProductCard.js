@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 
-export default function ProductCard({ id, name, price, tag, label, onAddToCart }) {
+export default function ProductCard({ id, name, price, tag, label, image, onAddToCart }) {
   const sizes = ['S', 'M', 'L', 'XL'];
 
   return (
@@ -11,7 +11,7 @@ export default function ProductCard({ id, name, price, tag, label, onAddToCart }
       <Link href={`/product/${id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
         <div className="ph">
           <span className="tag">{tag}</span>
-          <div className="label">
+          <div className="label bg-text">
             {label.split('\n').map((line, i) => (
               <React.Fragment key={i}>
                 {line}
@@ -19,6 +19,11 @@ export default function ProductCard({ id, name, price, tag, label, onAddToCart }
               </React.Fragment>
             ))}
           </div>
+          {image && (
+            <div className="card-img-circle">
+              <img src={image} alt={name} />
+            </div>
+          )}
           <div className="card-size-selector">
             {sizes.map((size) => (
               <span

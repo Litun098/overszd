@@ -13,17 +13,27 @@ export default function Shop() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [sortBy, setSortBy] = useState('new'); // 'new', 'price-asc', 'price-desc'
 
-  const categories = ['All', 'Hoodies', 'Tees', 'Cargos', 'New'];
+  const categories = [
+    { id: 'All', label: '00 / ALL' },
+    { id: 'Hoodies', label: '01 / HOODIES' },
+    { id: 'Tees', label: '02 / TEES' },
+    { id: 'Cargos', label: '03 / CARGOS' },
+    { id: 'New', label: '04 / NEW' }
+  ];
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
     
-    // Header entry animation
-    gsap.from('.shop-header h1', { y: 40, opacity: 0, duration: 0.9, ease: 'power3.out' });
-    gsap.from('.shop-filters', { y: 20, opacity: 0, duration: 0.8, ease: 'power2.out', delay: 0.1 });
-    
-    // Product grid reveal
-    gsap.from('.grid-container', { opacity: 0, y: 30, duration: 1, ease: 'power3.out', delay: 0.2 });
+    const ctx = gsap.context(() => {
+      // Header entry animation
+      gsap.from('.shop-header h1', { y: 40, opacity: 0, duration: 0.9, ease: 'power3.out' });
+      gsap.from('.shop-filters-container', { y: 20, opacity: 0, duration: 0.8, ease: 'power2.out', delay: 0.1 });
+      
+      // Product grid reveal
+      gsap.from('.grid-container', { opacity: 0, y: 30, duration: 1, ease: 'power3.out', delay: 0.2 });
+    });
+
+    return () => ctx.revert();
   }, []);
 
   // Filter and Sort logic
@@ -47,74 +57,36 @@ export default function Shop() {
         </div>
 
         {/* Filters and Controls */}
-        <div className="shop-filters" style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '1.5rem',
-          marginBottom: '3.5rem',
-          borderBottom: '1px solid var(--cream-2)',
-          paddingBottom: '1.5rem'
-        }}>
+        <div className="shop-filters-container">
           {/* Category selection */}
-          <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
+          <div className="category-filters">
             {categories.map((cat) => (
               <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`sz ${activeCategory === cat ? 'active' : ''}`}
-                style={{
-                  width: 'auto',
-                  height: 'auto',
-                  padding: '0.6rem 1.2rem',
-                  fontSize: '0.85rem',
-                  borderWidth: '1.5px',
-                  borderRadius: '30px',
-                  fontFamily: 'var(--font-space-grotesk), sans-serif',
-                  fontWeight: 700,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
-                  cursor: 'pointer'
-                }}
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`category-btn ${activeCategory === cat.id ? 'active' : ''}`}
               >
-                {cat}
+                {cat.label}
               </button>
             ))}
           </div>
 
           {/* Search and Sort controls */}
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', flex: '1', justifyContent: 'flex-end', minWidth: '280px' }}>
-            <div className="signup" style={{ maxWidth: '300px', flex: '1' }}>
+            <div className="shop-search-wrap">
               <input
                 type="text"
+                className="shop-search-input"
                 placeholder="SEARCH CATALOG..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                style={{
-                  padding: '0.75rem 1.2rem',
-                  fontSize: '0.85rem',
-                  border: '1.5px solid var(--char)'
-                }}
               />
             </div>
 
             <select
               value={sortBy}
+              className="shop-sort-select"
               onChange={(e) => setSortBy(e.target.value)}
-              style={{
-                background: 'transparent',
-                border: '1.5px solid var(--char)',
-                borderRadius: '40px',
-                padding: '0.75rem 1.5rem',
-                fontSize: '0.85rem',
-                fontFamily: 'var(--font-space-grotesk), sans-serif',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                outline: 'none',
-                cursor: 'pointer',
-                letterSpacing: '0.05em'
-              }}
             >
               <option value="new">Sort: Newest</option>
               <option value="price-asc">Price: Low to High</option>
@@ -146,6 +118,7 @@ export default function Shop() {
                   price={prod.price}
                   tag={prod.tag}
                   label={prod.label}
+                  image={prod.image}
                   onAddToCart={addToCart}
                 />
               ))}

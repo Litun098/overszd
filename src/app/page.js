@@ -20,29 +20,18 @@ export default function Home() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
-    // Hero loading animations
-    gsap.from('[data-hero]', { y: 60, opacity: 0, duration: 1.1, ease: 'power3.out', delay: 0.1 });
-    gsap.from('.hero .eyebrow', { y: 20, opacity: 0, duration: 0.8, ease: 'power2.out', delay: 0.05 });
-    gsap.from('.hero .sub, .hero .cta', { y: 24, opacity: 0, duration: 0.9, stagger: 0.12, ease: 'power2.out', delay: 0.5 });
-    gsap.from('.hero-img-wrap', { scale: 0.85, opacity: 0, duration: 1.3, ease: 'power3.out', delay: 0.2 });
-
-    // Scroll reveals
-    gsap.utils.toArray('.reveal').forEach((el) => {
-      gsap.to(el, {
-        y: 0,
-        opacity: 1,
-        duration: 0.9,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 88%',
-          toggleActions: 'play none none none',
-        },
-      });
+    const ctx = gsap.context(() => {
+      // Hero loading animations
+      gsap.from('[data-hero]', { y: 60, opacity: 0, duration: 1.1, ease: 'power3.out', delay: 0.1 });
+      gsap.from('.hero .eyebrow', { y: 20, opacity: 0, duration: 0.8, ease: 'power2.out', delay: 0.05 });
+      gsap.from('.hero .sub, .hero .cta', { y: 24, opacity: 0, duration: 0.9, stagger: 0.12, ease: 'power2.out', delay: 0.5 });
+      gsap.from('.hero-img-wrap', { scale: 0.85, opacity: 0, duration: 1.3, ease: 'power3.out', delay: 0.2 });
     });
 
     // Magnetic CTA button interactions
     const btns = document.querySelectorAll('.cta');
+    const cleanups = [];
+
     btns.forEach((btn) => {
       const mouseMoveHandler = (e) => {
         const r = btn.getBoundingClientRect();
@@ -78,11 +67,16 @@ export default function Home() {
       btn.addEventListener('mousemove', mouseMoveHandler);
       btn.addEventListener('mouseleave', mouseLeaveHandler);
 
-      return () => {
+      cleanups.push(() => {
         btn.removeEventListener('mousemove', mouseMoveHandler);
         btn.removeEventListener('mouseleave', mouseLeaveHandler);
-      };
+      });
     });
+
+    return () => {
+      ctx.revert();
+      cleanups.forEach((cleanup) => cleanup());
+    };
   }, []);
 
   return (
@@ -108,6 +102,7 @@ export default function Home() {
               price={prod.price}
               tag={prod.tag}
               label={prod.label}
+              image={prod.image}
               onAddToCart={addToCart}
             />
           ))}

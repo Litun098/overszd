@@ -33,8 +33,9 @@ export default function RootLayout({ children }) {
     <html
       lang="en"
       className={`${spaceGrotesk.variable} ${archivo.variable}`}
+      suppressHydrationWarning
     >
-      <body>
+      <body suppressHydrationWarning>
         <CartProvider>
           <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
         </CartProvider>

@@ -18,10 +18,14 @@ export default function ProductDetail() {
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
-    // Fade-in animations
-    gsap.from('.prod-detail-img', { opacity: 0, x: -40, duration: 1.1, ease: 'power3.out' });
-    gsap.from('.prod-detail-copy', { opacity: 0, x: 40, duration: 1.1, ease: 'power3.out' });
-    gsap.from('.related-section', { opacity: 0, y: 30, duration: 1, ease: 'power3.out', delay: 0.2 });
+    const ctx = gsap.context(() => {
+      // Fade-in animations
+      gsap.from('.prod-detail-img', { opacity: 0, x: -40, duration: 1.1, ease: 'power3.out' });
+      gsap.from('.prod-detail-copy', { opacity: 0, x: 40, duration: 1.1, ease: 'power3.out' });
+      gsap.from('.related-section', { opacity: 0, y: 30, duration: 1, ease: 'power3.out', delay: 0.2 });
+    });
+
+    return () => ctx.revert();
   }, [id]);
 
   if (!product) {
@@ -161,6 +165,7 @@ export default function ProductDetail() {
                 price={prod.price}
                 tag={prod.tag}
                 label={prod.label}
+                image={prod.image}
                 onAddToCart={addToCart}
               />
             ))}

@@ -6,8 +6,12 @@ import gsap from 'gsap';
 
 export default function About() {
   useEffect(() => {
-    gsap.from('.about-header h1', { y: 40, opacity: 0, duration: 0.9, ease: 'power3.out' });
-    gsap.from('.about-content', { y: 20, opacity: 0, duration: 0.9, ease: 'power2.out', delay: 0.15 });
+    const ctx = gsap.context(() => {
+      gsap.from('.about-header h1', { y: 40, opacity: 0, duration: 0.9, ease: 'power3.out' });
+      gsap.from('.about-content', { y: 20, opacity: 0, duration: 0.9, ease: 'power2.out', delay: 0.15 });
+    });
+
+    return () => ctx.revert();
   }, []);
 
   return (

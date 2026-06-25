@@ -6,8 +6,12 @@ import gsap from 'gsap';
 
 export default function SizeGuide() {
   useEffect(() => {
-    gsap.from('.size-header h1', { y: 40, opacity: 0, duration: 0.9, ease: 'power3.out' });
-    gsap.from('.size-content', { y: 20, opacity: 0, duration: 0.9, ease: 'power2.out', delay: 0.15 });
+    const ctx = gsap.context(() => {
+      gsap.from('.size-header h1', { y: 40, opacity: 0, duration: 0.9, ease: 'power3.out' });
+      gsap.from('.size-content', { y: 20, opacity: 0, duration: 0.9, ease: 'power2.out', delay: 0.15 });
+    });
+
+    return () => ctx.revert();
   }, []);
 
   const hoodieMeasurements = [

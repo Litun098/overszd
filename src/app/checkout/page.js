@@ -24,8 +24,12 @@ export default function Checkout() {
   const [discountPercent, setDiscountPercent] = useState(0);
 
   useEffect(() => {
-    // Basic entry fade
-    gsap.from('.checkout-container', { opacity: 0, y: 30, duration: 0.9, ease: 'power3.out' });
+    // Basic entry fade inside context
+    const ctx = gsap.context(() => {
+      gsap.from('.checkout-container', { opacity: 0, y: 30, duration: 0.9, ease: 'power3.out' });
+    });
+
+    return () => ctx.revert();
   }, []);
 
   // Subtotal calculations

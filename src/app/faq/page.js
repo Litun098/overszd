@@ -8,8 +8,12 @@ export default function FAQ() {
   const [openIndex, setOpenIndex] = useState(null);
 
   useEffect(() => {
-    gsap.from('.faq-header h1', { y: 40, opacity: 0, duration: 0.9, ease: 'power3.out' });
-    gsap.from('.faq-list', { y: 20, opacity: 0, duration: 0.9, ease: 'power2.out', delay: 0.15 });
+    const ctx = gsap.context(() => {
+      gsap.from('.faq-header h1', { y: 40, opacity: 0, duration: 0.9, ease: 'power3.out' });
+      gsap.from('.faq-list', { y: 20, opacity: 0, duration: 0.9, ease: 'power2.out', delay: 0.15 });
+    });
+
+    return () => ctx.revert();
   }, []);
 
   const faqs = [
